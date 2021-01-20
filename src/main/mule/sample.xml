@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="ed767280-aec6-42a3-b325-3635cf56e619" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="sampleFlow" doc:id="c98a5c53-d0dc-446b-aed6-5decf7284d2b" >
+		<http:listener doc:name="POST /sample" doc:id="bc2cd466-f508-45ad-b6eb-c39b73c9391a" path="/sample" config-ref="HTTP_Listener_config" allowedMethods="POST"/>
+		<choice doc:name="Choice" doc:id="2771a54a-0b94-402a-9e77-4ce869bd3319" >
+			<when expression="#[attributes.queryParams.company == 'IBM']">
+				<set-variable value="1000" doc:name="Set Variable" doc:id="399aba61-cc8e-4787-a653-d75068c95537" variableName="salary"/>
+			</when>
+			<otherwise >
+				<set-variable value="2000" doc:name="Set Variable" doc:id="4d45127a-59c8-4ebf-933c-2f27463b4aab" variableName="salary"/>
+			</otherwise>
+		</choice>
+		<ee:transform doc:name="Transform Message" doc:id="f06d54f0-a2af-4f06-ba21-70a6fa947fc9" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+    name : payload.name,
+    salary : vars.salary
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
