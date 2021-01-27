@@ -7,13 +7,13 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>mule-application</packaging>
 
-	<name>sample</name>
+	<name>ImportedFromGit</name>
 
     <properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<app.runtime>4.3.0-20201013</app.runtime>
+		<app.runtime>4.3.0</app.runtime>
 		<mule.maven.plugin.version>3.3.5</mule.maven.plugin.version>
 	<munit.version>2.3.1</munit.version>
     </properties>
@@ -31,7 +31,20 @@
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
 				<configuration>
-				</configuration>
+				<cloudHubDeployment>
+				  <uri>https://anypoint.mulesoft.com</uri>
+				  <muleVersion>${app.runtime}</muleVersion>
+				  <username>${anypoint.username}</username>
+				  <password>${anypoint.password}</password>
+				  <applicationName>${applicationName}</applicationName>
+				  <businessGroup>${business}</businessGroup>
+				  <environment>${env}</environment>
+				  <workers>${workers}</workers>
+				  <workerType>${vCore}</workerType>
+				  <objectStoreV2>true</objectStoreV2>
+				</cloudHubDeployment>
+				<classifier>mule-application</classifier>
+                </configuration>
 			</plugin>
 		<plugin>
                 <groupId>com.mulesoft.munit.tools</groupId>
